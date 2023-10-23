@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import {
   View,
   Image,
@@ -20,7 +20,7 @@ import { styles } from "./style";
 const { width, height } = Dimensions.get("screen");
 const Os = Platform.OS;
 export type DataType = { img: ImageSourcePropType };
-export const ImageSlider = ({
+const ImageSlider = ({
   data = [],
   showHeader = false,
   headerRightComponent = null,
@@ -44,7 +44,7 @@ export const ImageSlider = ({
   children,
   closeIconColor = "#000",
   blurRadius = 50,
-}: PropsTypes) => {
+}: PropsTypes, ref) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const imageW = width * 0.7;
   const imageH = imageW * 1.54;
@@ -78,6 +78,12 @@ export const ImageSlider = ({
       clearTimeout(timerRef?.current);
     }
   }, [currentIndex, imageViewer]);
+
+  useImperativeHandle(ref, () => ({
+    resetIndexTo: () => {      
+      clearTimeout(timerRef.current);
+    },
+  }));
 
   const changeSliderListIndex = () => {
     if (slider.current) {
@@ -285,3 +291,5 @@ export const ImageSlider = ({
     </View>
   );
 };
+
+export default forwardRef(ImageSlider)
