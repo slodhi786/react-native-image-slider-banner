@@ -65,14 +65,14 @@ const ImageSlider = ({
 
   useEffect(() => {
     if (autoPlay) {
-      if (data.length > 0) startAutoPlay(imageViewer ? true : false);
+      if (data.length > 0) activateAutoPlay(imageViewer ? true : false);
     }
   }, []);
 
   useEffect(() => {
     if (!imageViewer) {
       if (autoPlay) {
-        if (data.length > 0) startAutoPlay(imageViewer ? true : false);
+        if (data.length > 0) activateAutoPlay(imageViewer ? true : false);
       }
     } else {
       clearTimeout(timerRef?.current);
@@ -80,8 +80,13 @@ const ImageSlider = ({
   }, [currentIndex, imageViewer]);
 
   useImperativeHandle(ref, () => ({
-    resetIndexTo: () => {      
-      clearTimeout(timerRef.current);
+    stopAutoplay: () => {      
+      clearTimeout(timerRef?.current);
+    },
+    startAutoplay: () => {      
+      if (autoPlay) {
+        if (data.length > 0) activateAutoPlay(imageViewer ? true : false);
+      }
     },
   }));
 
@@ -106,7 +111,7 @@ const ImageSlider = ({
     }
   };
 
-  const startAutoPlay = (isViewer: boolean) => {
+  const activateAutoPlay = (isViewer: boolean) => {
     if (!imageViewer) {
       ((viewer) => {
         let viewBool = viewer;
