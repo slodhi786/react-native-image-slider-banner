@@ -1,2 +1,2 @@
-import { ImageSlider } from './src'
+import ImageSlider from './src'
 export { ImageSlider }
